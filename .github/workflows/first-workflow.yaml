@@ -10,3 +10,8 @@ jobs:
               run: |
                 node -v
                 npm -v
+    parallel-job:
+        runs-on: ubuntu-latest
+        steps:
+            - name: some specific command
+              run: echo $(ls)
