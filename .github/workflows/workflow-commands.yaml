@@ -13,3 +13,5 @@ jobs:
               run: echo "::debug title=Debug title,file=app.js,line=2,endLine=3,col=5,endCol=7::Missing Semicolon"
             - name: Setting a warning message with params
               run: echo "::warning title=Warning title,file=app.js,line=2,endLine=3,col=5,endCol=7::Missing Semicolon"
+            - name: Masking a value
+              run: echo "::add-mask::Secret String"
