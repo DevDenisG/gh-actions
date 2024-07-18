@@ -46,7 +46,7 @@ jobs:
       - name: Check if config file already exists
         id: version_config_ls
         run: |
-          S3_LS_EXIT_CODE=0
+          S3_LS_EXIT_CODE=1
           echo "s3 ls exit code $S3_LS_EXIT_CODE"
           echo "s3_ls_exit_code=$S3_LS_EXIT_CODE" >> $GITHUB_OUTPUT
       - name: Adjust version config file
