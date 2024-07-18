@@ -51,7 +51,7 @@ jobs:
           echo "version_config_path=$VERSION_CONFIG_BUCKET_PATH" >> $GITHUB_OUTPUT
       - name: Adjust version config file
         run: |
-          if [[ ${{ steps.version_config_ls.s3_ls_exit_code == 0 ]]
+          if [[ ${{ steps.version_config_ls.s3_ls_exit_code }} == 0 ]]
           then
             TEMP_FILE=$(mktemp)
             echo "{\"jds_prometheus_version\": \"abc\"}" > test.json
