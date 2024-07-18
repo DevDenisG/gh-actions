@@ -51,7 +51,7 @@ jobs:
           echo "s3_ls_exit_code=$S3_LS_EXIT_CODE" >> $GITHUB_OUTPUT
       - name: Adjust version config file
         run: |
-          if [[ "${{ steps.version_config_ls.s3_ls_exit_code }}" == "0" ]]
+          if [[ "${{ steps.version_config_ls.outputs.s3_ls_exit_code }}" == 0 ]]
           then
             TEMP_FILE=$(mktemp)
             echo "{\"jds_prometheus_version\": \"abc\"}" > test.json
