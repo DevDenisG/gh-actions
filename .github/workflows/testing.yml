@@ -42,5 +42,27 @@ jobs:
             VERSION_CONFIG_BUCKET_PATH="def"
           fi
           echo "version config bucket path $VERSION_CONFIG_BUCKET_PATH"
+      - name: Check if config file already exists
+        id: version_config_ls
+        run: |
+          S3_LS_EXIT_CODE=0
+          echo "s3 ls exit code $S3_LS_EXIT_CODE"
+          echo "s3_ls_exit_code=$S3_LS_EXIT_CODE" >> $GITHUB_OUTPUT
           echo "version_config_path=$VERSION_CONFIG_BUCKET_PATH" >> $GITHUB_OUTPUT
+      - name: Adjust version config file
+        run: |
+          if [[ ${{ steps.version_config_ls.s3_ls_exit_code == 0 ]]
+          then
+            TEMP_FILE=$(mktemp)
+            echo "{\"jds_prometheus_version\": \"abc\"}" > test.json
+            cp test.json $TEMP_FILE
+            CONTENTS=$(jq --arg version "${{ inputs.version }}" '.jds_prometheus_version = $version' $TEMP_FILE)
+            echo -E "${CONTENTS}" > $TEMP_FILE
+            cat $TEMP_FILE
+            echo "adjusted prometheus version config"
+          else 
+            echo "{\"jds_prometheus_version\": \"${{ inputs.version }}\"}" > version-info.json
+            cat version-info.json
+            echo "added prometheus version config"
+          fi
           
