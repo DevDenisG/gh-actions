@@ -1,0 +1,46 @@
+name: 🚀 Prometheus Deployment
+run-name: 🚀 Prometheus Deployment on ${{ github.event.inputs.hubEnv }} with version ${{ github.event.inputs.version }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      hubEnv:
+        description: Select environment
+        required: true
+        type: choice
+        options:
+          - 'EMEA-DEV'
+          - 'EMEA-INT'
+          - 'EMEA-LOAD'
+          - 'EMEA-E2E'
+          - 'EMEA-PROD'
+          - 'US-E2E'
+          - 'US-PROD'
+          - 'CN-E2E'
+          - 'CN-PROD'
+      version:
+        description: "Set a specific version to deploy"
+        required: true
+        type: string
+      deployInBrokerVPC:
+        description: Deployment in broker VPC (supported for EMEA DEV/INT, EMEA/US/CN E2E and US PROD)
+        type: boolean
+        default: true
+
+jobs:
+  deployment:
+    runs-on: ubuntu-latest
+    name: Deployment Prometheus ${{ github.event.inputs.hubEnv }}
+    steps:
+      - name: Get version config path
+        id: version_config_path
+        run: |
+          if [[ "${{ inputs.deployInBrokerVPC }}" ]]
+          then
+            VERSION_CONFIG_BUCKET_PATH="abc"
+          else
+            VERSION_CONFIG_BUCKET_PATH="def"
+          fi
+          echo "version config bucket path $VERSION_CONFIG_BUCKET_PATH"
+          echo "version_config_path=$VERSION_CONFIG_BUCKET_PATH" >> $GITHUB_OUTPUT
+          
